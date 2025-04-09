@@ -14,10 +14,10 @@ from __init__ import app, db
 def default_year():
     """
     Returns the default year for user enrollment based on the current month.
-    
+
     If the current month is between August (8) and December (12), the enrollment year is the next year.
     Otherwise, it is the current year.
-    
+
     Returns:
         int: The default year for user enrollment.
     """
@@ -25,7 +25,7 @@ def default_year():
     current_year = date.today().year
     if 7 <= current_month <= 12:
         current_year += 1
-    return current_year 
+    return current_year
 
 """ Database Models """
 
@@ -58,14 +58,12 @@ class User(db.Model, UserMixin):
     _password = db.Column(db.String(255), unique=False, nullable=False)
     _role = db.Column(db.String(20), default="User", nullable=False)
     _pfp = db.Column(db.String(255), unique=False, nullable=True)
-   
-    posts = db.relationship('Post', backref='author', lazy=True)
-                                 
-    
+
+
     def __init__(self, name, uid, password="", role="User", pfp='', email='?'):
         """
         Constructor, 1st step in object creation.
-        
+
         Args:
             name (str): The name of the user.
             uid (str): The unique identifier for the user.
@@ -84,7 +82,7 @@ class User(db.Model, UserMixin):
     def get_id(self):
         """
         Returns the user's ID as a string.
-        
+
         Returns:
             str: The user's ID.
         """
@@ -95,7 +93,7 @@ class User(db.Model, UserMixin):
     def is_authenticated(self):
         """
         Indicates whether the user is authenticated.
-        
+
         Returns:
             bool: True if the user is authenticated, False otherwise.
         """
@@ -106,7 +104,7 @@ class User(db.Model, UserMixin):
     def is_active(self):
         """
         Indicates whether the user is active.
-        
+
         Returns:
             bool: True if the user is active, False otherwise.
         """
@@ -117,27 +115,27 @@ class User(db.Model, UserMixin):
     def is_anonymous(self):
         """
         Indicates whether the user is anonymous.
-        
+
         Returns:
             bool: True if the user is anonymous, False otherwise.
         """
         return False
-    
+
     @property
     def email(self):
         """
         Gets the user's email.
-        
+
         Returns:
             str: The user's email.
         """
         return self._email
-    
+
     @email.setter
     def email(self, email):
         """
         Sets the user's email.
-        
+
         Args:
             email (str): The new email for the user.
         """
@@ -145,10 +143,10 @@ class User(db.Model, UserMixin):
             self._email = "?"
         else:
             self._email = email
-        
+
     def set_email(self):
         """
-        Sets the email of the user based on the UID 
+        Sets the email of the user based on the UID
         """
         self.email = "?"
 
@@ -156,7 +154,7 @@ class User(db.Model, UserMixin):
     def name(self):
         """
         Gets the user's name.
-        
+
         Returns:
             str: The user's name.
         """
@@ -166,7 +164,7 @@ class User(db.Model, UserMixin):
     def name(self, name):
         """
         Sets the user's name.
-        
+
         Args:
             name (str): The new name for the user.
         """
@@ -176,7 +174,7 @@ class User(db.Model, UserMixin):
     def uid(self):
         """
         Gets the user's unique identifier.
-        
+
         Returns:
             str: The user's unique identifier.
         """
@@ -186,7 +184,7 @@ class User(db.Model, UserMixin):
     def uid(self, uid):
         """
         Sets the user's unique identifier.
-        
+
         Args:
             uid (str): The new unique identifier for the user.
         """
@@ -195,10 +193,10 @@ class User(db.Model, UserMixin):
     def is_uid(self, uid):
         """
         Checks if the provided UID matches the user's UID.
-        
+
         Args:
             uid (str): The UID to check.
-        
+
         Returns:
             bool: True if the UID matches, False otherwise.
         """
@@ -208,7 +206,7 @@ class User(db.Model, UserMixin):
     def password(self):
         """
         Gets the user's password (partially obscured for security).
-        
+
         Returns:
             str: The user's password (first 10 characters followed by "...").
         """
@@ -217,7 +215,7 @@ class User(db.Model, UserMixin):
     def set_password(self, password):
         """
         Sets the user's password (hashed).
-        
+
         Args:
             password (str): The new password for the user.
         """
@@ -228,10 +226,10 @@ class User(db.Model, UserMixin):
     def is_password(self, password):
         """
         Checks if the provided password matches the user's stored password.
-        
+
         Args:
             password (str): The password to check.
-        
+
         Returns:
             bool: True if the password matches, False otherwise.
         """
@@ -240,7 +238,7 @@ class User(db.Model, UserMixin):
     def __str__(self):
         """
         Returns a string representation of the user object (JSON format).
-        
+
         Returns:
             str: A JSON string representation of the user object.
         """
@@ -250,7 +248,7 @@ class User(db.Model, UserMixin):
     def role(self):
         """
         Gets the user's role.
-        
+
         Returns:
             str: The user's role.
         """
@@ -260,7 +258,7 @@ class User(db.Model, UserMixin):
     def role(self, role):
         """
         Sets the user's role.
-        
+
         Args:
             role (str): The new role for the user.
         """
@@ -269,17 +267,17 @@ class User(db.Model, UserMixin):
     def is_admin(self):
         """
         Checks if the user is an admin.
-        
+
         Returns:
             bool: True if the user is an admin, False otherwise.
         """
         return self._role == "Admin"
-    
+
     @property
     def pfp(self):
         """
         Gets the user's profile picture path.
-        
+
         Returns:
             str: The path to the user's profile picture.
         """
@@ -289,7 +287,7 @@ class User(db.Model, UserMixin):
     def pfp(self, pfp):
         """
         Sets the user's profile picture path.
-        
+
         Args:
             pfp (str): The new profile picture path for the user.
         """
@@ -298,10 +296,10 @@ class User(db.Model, UserMixin):
     def create(self, inputs=None):
         """
         Adds a new record to the table and commits the transaction.
-        
+
         Args:
             inputs (dict, optional): Additional data to update the user with.
-        
+
         Returns:
             User: The created user object, or None on error.
         """
@@ -318,7 +316,7 @@ class User(db.Model, UserMixin):
     def read(self):
         """
         Converts the user object to a dictionary.
-        
+
         Returns:
             dict: A dictionary representation of the user object.
         """
@@ -331,14 +329,14 @@ class User(db.Model, UserMixin):
             "pfp": self._pfp,
         }
         return data
-        
+
     def update(self, inputs):
         """
         Updates the user object with new data.
-        
+
         Args:
             inputs (dict): A dictionary containing the new data for the user.
-        
+
         Returns:
             User: The updated user object, or None on error.
         """
@@ -369,11 +367,11 @@ class User(db.Model, UserMixin):
             db.session.rollback()
             return None
         return self
-    
+
     def delete(self):
         """
         Removes the user object from the database and commits the transaction.
-        
+
         Returns:
             None
         """
@@ -382,12 +380,12 @@ class User(db.Model, UserMixin):
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
-        return None   
-    
+        return None
+
     def save_pfp(self, image_data, filename):
         """
         Saves the user's profile picture.
-        
+
         Args:
             image_data (bytes): The image data of the profile picture.
             filename (str): The filename of the profile picture.
@@ -402,21 +400,21 @@ class User(db.Model, UserMixin):
             self.update({"pfp": filename})
         except Exception as e:
             raise e
-        
+
     def delete_pfp(self):
         """
         Deletes the user's profile picture from the user record.
         """
         self.pfp = None
         db.session.commit()
-        
+
     def set_uid(self, new_uid=None):
         """
         Updates the user's directory based on the new UID provided.
 
         Args:
             new_uid (str, optional): The new UID to update the user's directory.
-        
+
         Returns:
             User: The updated user object.
         """
@@ -434,7 +432,7 @@ class User(db.Model, UserMixin):
             new_path = os.path.join(current_app.config['UPLOAD_FOLDER'], self._uid)
             if os.path.exists(old_path):
                 os.rename(old_path, new_path)
-                
+
     @staticmethod
     def restore(data):
         users = {}
@@ -455,13 +453,13 @@ class User(db.Model, UserMixin):
 def initUsers():
     """
     The initUsers function creates the User table and adds tester data to the table.
-    
+
     Uses:
         The db ORM methods to create the table.
-    
+
     Instantiates:
         User objects with tester data.
-    
+
     Raises:
         IntegrityError: An error occurred when adding the tester data to the table.
     """
@@ -469,12 +467,12 @@ def initUsers():
         """Create database and tables"""
         db.create_all()
         """Tester data for table"""
-        
+
         u1 = User(name='Thomas Edison', uid=app.config['ADMIN_USER'], password=app.config['ADMIN_PASSWORD'], pfp='toby.png', role="Admin")
         u2 = User(name='Grace Hopper', uid=app.config['DEFAULT_USER'], password=app.config['DEFAULT_PASSWORD'], pfp='hop.png')
         u3 = User(name='Nicholas Tesla', uid='niko', password='123niko', pfp='niko.png' )
         users = [u1, u2, u3]
-        
+
         for user in users:
             try:
                 user.create()
