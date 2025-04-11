@@ -7,20 +7,21 @@ from flask import abort, redirect, render_template, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from flask.cli import AppGroup
 from flask import current_app
-from werkzeug.security import generate_password_hash
-import shutil
-import datetime
 # import "objects" from "this" project
 from __init__ import app, db, login_manager  # Key Flask objects
 # API endpoints
 from api.user import user_api
 from api.pfp import pfp_api
+from api.review_api import review_api
+from api.roads_api import roads_api
 
 from model.user import User, initUsers
 
 # register URIs for api endpoints
 app.register_blueprint(user_api)
 app.register_blueprint(pfp_api)
+app.register_blueprint(review_api) ## /api/review
+app.register_blueprint(roads_api) ## /api/roads
 
 custom_cli = AppGroup('custom', help='Custom commands')
 
