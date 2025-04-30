@@ -22,13 +22,16 @@ class ReviewAPI:
 
             data = request.get_json()
 
-            if not data or not "road_id" in data or not "description" in data or not "rating" in data:
+            if not data or not "road_name" in data or not "description" in data or not "rating" in data:
                 return Response("{'message': 'bad data'}", 400)
+            
+            road = Road.query.filter_by(_road_name=data["road_name"]).first()
 
-            if not Road.query.get(data['road_id']):
-                return Response("{'message': 'road not found'}", 404)
+            if not road:
+                road = Road(data["road_name"])
+                road.create()
 
-            review = Review(current_user.id, data['road_id'], data["description"], data['rating'])
+            review = Review(current_user.id, road.id, data["description"], data['rating'])
 
             review.create()
 

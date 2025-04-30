@@ -24,10 +24,10 @@ class RoadAPI:
 
             data = request.get_json()
 
-            if not data or not "road_name" in data or not "place_id" in data:
+            if not data or not "road_name" in data:
                 return Response("{'message': 'bad data'}", 400)
 
-            road = Road(data['road_name'], data["place_id"])
+            road = Road(data['road_name'])
 
             road.create()
 
@@ -59,9 +59,6 @@ class RoadAPI:
             
             if data['road_name']:
                 road._road_name = data['road_name']
-
-            if data['place_id']:
-                road._place_id = data['place_id']
             
             road.update()
 

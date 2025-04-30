@@ -4,21 +4,16 @@ from __init__ import app, db
 from model.user import User
 from datetime import datetime
 
-# DO THE RELATIONAL COLUMN FOR ROAD ID
-
 class Road(db.Model):
     __tablename__ = 'Roads'
     id = db.Column(db.Integer, primary_key=True)
     _road_name = db.Column(db.String(255), nullable=True)
-    _place_id = db.Column(db.Integer, nullable=False)
-    ## PLACE_ID IS FROM THE GOOGLE MAPS API (NEED TO VERIFY THIS)
 
-    def __init__(self, road_name, place_id):
+    def __init__(self, road_name):
         self._road_name = road_name
-        self._place_id = place_id
 
     def __repr__(self):
-        return f"Review(id={self.id}, road_name={self._road_name}, place_id={self._place_id})"
+        return f"Review(id={self.id}, road_name={self._road_name})"
     
     def create(self):
         try:
@@ -32,14 +27,12 @@ class Road(db.Model):
         data = {
             "id": self.id,
             "road_name": self._road_name,
-            "place_id": self._place_id,
         }
         return data
     
     def update(self, inputs=None):
         if inputs:
             self._road_name = inputs.get("road_name", self._road_name)
-            self._place_id = inputs.get("place_id", self._place_id)
         try:
             db.session.commit()
         except Exception as error:

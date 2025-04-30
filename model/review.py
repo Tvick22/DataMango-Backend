@@ -3,6 +3,7 @@ from sqlalchemy import Text
 from __init__ import app, db
 from model.user import User
 from datetime import datetime
+from model.roads import Road
 
 # DO THE RELATIONAL COLUMN FOR ROAD ID
 
@@ -35,9 +36,11 @@ class Review(db.Model):
         
     def read(self):
         user = User.query.get(self._uid)
+        road = Road.query.get(self._road_id)
+
         data = {
             "id": self.id,
-            "road": self._road_id,
+            "road": road.read(),
             "description": self._description,
             "rating": self._rating,
             "user": {
